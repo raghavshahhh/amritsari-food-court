@@ -17,8 +17,8 @@ const footerLinks = [
 export default function Footer() {
   const pathname = usePathname()
 
-  // Hide footer on menu and checkout pages per user directive
-  if (pathname === '/menu' || pathname === '/checkout') return null
+  // Hide footer on app/admin/utility pages per user directive
+  if (['/menu', '/checkout', '/admin', '/login'].includes(pathname)) return null
 
   return (
     <footer className="relative max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-8">
