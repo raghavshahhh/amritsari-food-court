@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import MobileMenu from './MobileMenu'
+import { User, ShieldCheck } from 'lucide-react'
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/menu', label: 'Menu' },
-  { href: '/about', label: 'About' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/about', label: 'Story' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -15,32 +17,62 @@ const MotionLink = motion.create(Link)
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+    <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
+      <nav
+        className="max-w-6xl mx-auto h-14 rounded-full bg-black/75 backdrop-blur-2xl border border-white/15 px-6 flex items-center justify-between shadow-2xl shadow-black/80 pointer-events-auto"
+        aria-label="Main navigation"
+      >
+        {/* Brand Logo */}
         <Link
           href="/"
-          className="text-2xl font-display font-bold text-amber-500 tracking-tight"
+          className="flex items-center gap-2 font-display font-extrabold text-white text-lg tracking-tight hover:opacity-90 transition-opacity"
           aria-label="Amritsari Food Court - Home"
         >
-          Amritsari Food Court
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50" />
+          <span className="bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500 bg-clip-text text-transparent">
+            Amritsari Food Court
+          </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop Nav Links */}
+        <div className="hidden lg:flex items-center gap-7">
           {navLinks.map((link, i) => (
             <MotionLink
               key={link.href}
               href={link.href}
-              className="text-white/80 hover:text-amber-500 transition-colors font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-amber-500 after:transition-all hover:after:w-full"
-              initial={{ opacity: 0, y: -10 }}
+              className="text-xs uppercase tracking-widest font-bold text-white/70 hover:text-amber-400 transition-colors relative py-1"
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.08 }}
+              transition={{ delay: 0.05 + i * 0.05 }}
             >
               {link.label}
             </MotionLink>
           ))}
+        </div>
+
+        {/* Right Action Items */}
+        <div className="hidden md:flex items-center gap-3">
           <Link
-            href="/contact"
-            className="magnetic-btn bg-amber-500 text-black hidden sm:inline-flex ml-4"
+            href="/admin"
+            className="p-2 rounded-full text-white/60 hover:text-amber-400 hover:bg-white/5 transition-all text-xs flex items-center gap-1 font-bold"
+            title="Admin Dashboard"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span className="hidden xl:inline">Admin</span>
+          </Link>
+
+          <Link
+            href="/login"
+            className="p-2 rounded-full text-white/60 hover:text-amber-400 hover:bg-white/5 transition-all text-xs flex items-center gap-1 font-bold"
+            title="Customer / Staff Login"
+          >
+            <User className="w-4 h-4" />
+            <span className="hidden xl:inline">Login</span>
+          </Link>
+
+          <Link
+            href="/menu"
+            className="py-2 px-5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs tracking-wider uppercase transition-all shadow-md shadow-amber-500/25 hover:scale-105 active:scale-95"
           >
             Order Now
           </Link>

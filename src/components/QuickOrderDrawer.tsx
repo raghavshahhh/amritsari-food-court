@@ -129,13 +129,13 @@ export default function QuickOrderDrawer({ cart, onUpdateQuantity }: QuickOrderD
                     <button
                       key={type}
                       onClick={() => setOrderType(type)}
-                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold capitalize transition-all border ${
+                      className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all border ${
                         orderType === type
-                          ? 'bg-amber-500 text-black border-amber-500'
+                          ? 'bg-amber-500 text-black border-amber-500 shadow-md shadow-amber-500/20'
                           : 'bg-white/5 text-white/70 border-white/10 hover:border-white/20'
                       }`}
                     >
-                      {type === 'dinein' ? '🍽️ Dine In' : type === 'takeaway' ? '🛍️ Takeaway' : '🚀 Delivery'}
+                      {type === 'dinein' ? 'Dine In' : type === 'takeaway' ? 'Takeaway' : 'Delivery'}
                     </button>
                   ))}
                 </div>

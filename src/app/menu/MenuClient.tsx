@@ -296,7 +296,7 @@ export default function MenuClient() {
         <div className="absolute inset-0 bg-gradient-to-b from-amber-500/15 via-black/80 to-black z-0" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <TextReveal as="span" className="text-xs font-black tracking-widest uppercase text-amber-500 mb-3 block" delay={0}>
-            🔥 Authentic Punjabi Menu
+            Authentic Punjabi Menu
           </TextReveal>
           <TextReveal as="h1" className="text-4xl md:text-6xl font-display font-extrabold leading-tight mb-4" delay={0.1}>
             Taste the <span className="gradient-text">Legendary Flavors</span>
@@ -359,19 +359,19 @@ export default function MenuClient() {
             </button>
             <button
               onClick={() => setDietaryFilter('veg')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 dietaryFilter === 'veg' ? 'bg-emerald-600 text-white' : 'text-white/60 hover:text-white'
               }`}
             >
-              🟢 Veg
+              <span className="w-2 h-2 rounded-full bg-emerald-400" /> Veg
             </button>
             <button
               onClick={() => setDietaryFilter('nonveg')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 dietaryFilter === 'nonveg' ? 'bg-rose-600 text-white' : 'text-white/60 hover:text-white'
               }`}
             >
-              🔴 Non-Veg
+              <span className="w-2 h-2 rounded-full bg-rose-400" /> Non-Veg
             </button>
           </div>
         </div>
@@ -408,11 +408,12 @@ export default function MenuClient() {
                         />
                         <div className="absolute top-3 left-3 flex gap-1.5">
                           <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
                               item.isVeg ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-500/40' : 'bg-rose-950/90 text-rose-400 border border-rose-500/40'
                             }`}
                           >
-                            {item.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}
+                            <span className={`w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                            {item.isVeg ? 'Veg' : 'Non-Veg'}
                           </span>
                           {item.popular && (
                             <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-black flex items-center gap-1 shadow-md">
@@ -424,11 +425,12 @@ export default function MenuClient() {
                     ) : (
                       <div className="p-4 pt-6 flex justify-between items-start">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
                             item.isVeg ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-500/40' : 'bg-rose-950/90 text-rose-400 border border-rose-500/40'
                           }`}
                         >
-                          {item.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}
+                          <span className={`w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                          {item.isVeg ? 'Veg' : 'Non-Veg'}
                         </span>
                       </div>
                     )}

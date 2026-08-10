@@ -69,7 +69,7 @@ export default function HomeClient() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-black uppercase tracking-widest text-amber-400">
-                🟢 Live in Mahipalpur, Delhi · Open Daily 11 AM - 11 PM
+                Live in Mahipalpur, Delhi · Open Daily 11 AM - 11 PM
               </span>
             </div>
 
@@ -101,7 +101,7 @@ export default function HomeClient() {
                 <div className="w-8 h-8 rounded-full bg-amber-500 text-black flex items-center justify-center">
                   <Play className="w-4 h-4 fill-black ml-0.5" />
                 </div>
-                Watch Food Reel 🎥
+                Watch Kitchen Reel
               </button>
             </div>
 
@@ -165,7 +165,7 @@ export default function HomeClient() {
           <div className="flex items-center gap-3 mb-4">
             <Sparkles className="w-5 h-5 text-amber-500" />
             <h2 className="text-sm font-black uppercase tracking-widest text-amber-400">
-              Tap to Watch Live Kitchen Reels 🎬
+              Tap to Watch Live Kitchen Reels
             </h2>
           </div>
 
@@ -214,7 +214,7 @@ export default function HomeClient() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
             <TextReveal as="span" className="text-xs font-black tracking-widest uppercase text-amber-500 mb-2 block" delay={0}>
-              🔥 Bestsellers & Customer Favorites
+              Bestsellers & Customer Favorites
             </TextReveal>
             <TextReveal as="h2" className="text-3xl md:text-5xl font-display font-black" delay={0.1}>
               Flavors That Keep Delhi Coming Back
