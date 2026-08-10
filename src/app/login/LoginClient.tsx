@@ -4,17 +4,54 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { User, ShieldCheck, Phone, ArrowRight, CheckCircle2, Lock } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCart } from '@/context/CartContext'
 
 export default function LoginClient() {
+  const router = useRouter()
+  const { showToast } = useCart()
   const [role, setRole] = useState<'customer' | 'admin'>('customer')
   const [phone, setPhone] = useState('')
+  const [username, setUsername] = useState('admin@amritsari.com')
   const [password, setPassword] = useState('')
   const [status, setStatus] = useState<'idle' | 'success'>('idle')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setStatus('success')
-    setTimeout(() => setStatus('idle'), 4000)
+    setIsSubmitting(true)
+
+    try {
+      const payload =
+        role === 'customer'
+          ? { action: 'send_otp', phone }
+          : { action: 'admin_login', username, password }
+
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        setStatus('success')
+        showToast(role === 'customer' ? 'OTP sent! Logging in...' : 'Admin authenticated successfully')
+        setTimeout(() => {
+          if (role === 'admin') {
+            router.push('/admin')
+          } else {
+            router.push('/menu')
+          }
+        }, 1200)
+      } else {
+        showToast(data.error || 'Authentication failed', 'error')
+      }
+    } catch {
+      showToast('Network error during login', 'error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -96,7 +133,8 @@ export default function LoginClient() {
                   <User className="w-4 h-4 text-amber-500 absolute left-4 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="admin@amritsari.com"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
                     className="w-full bg-white/5 border border-white/15 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-500"
                   />
@@ -122,9 +160,10 @@ export default function LoginClient() {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-xl shadow-amber-500/20 flex items-center justify-center gap-2"
           >
-            <span>{role === 'customer' ? 'Send OTP & Login' : 'Enter Admin Panel'}</span>
+            <span>{isSubmitting ? 'Verifying...' : role === 'customer' ? 'Send OTP & Login' : 'Enter Admin Panel'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

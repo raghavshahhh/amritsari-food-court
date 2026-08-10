@@ -3,6 +3,9 @@
 import { ReactLenis } from 'lenis/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
+import { CartProvider } from '@/context/CartContext'
+import ToastContainer from './ToastContainer'
+import OrderTrackerModal from './OrderTrackerModal'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -16,18 +19,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactLenis
-        root
-        options={{
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          orientation: 'vertical',
-          gestureOrientation: 'vertical',
-          smoothWheel: true,
-        }}
-      >
-        {children}
-      </ReactLenis>
+      <CartProvider>
+        <ReactLenis
+          root
+          options={{
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+          }}
+        >
+          {children}
+          <ToastContainer />
+          <OrderTrackerModal />
+        </ReactLenis>
+      </CartProvider>
     </QueryClientProvider>
   )
 }

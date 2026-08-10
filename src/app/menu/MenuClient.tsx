@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Search, Flame, Plus, Minus } from 'lucide-react'
-import QuickOrderDrawer, { CartItem } from '@/components/QuickOrderDrawer'
+import { useCart } from '@/context/CartContext'
 
 const TextReveal = dynamic(() => import('@/components/TextReveal'), { ssr: false })
 
@@ -258,21 +258,15 @@ export default function MenuClient() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [dietaryFilter, setDietaryFilter] = useState<'all' | 'veg' | 'nonveg'>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [cart, setCart] = useState<CartItem[]>([])
+  const { cart, addToCart, updateQuantity } = useCart()
 
   const handleUpdateQuantity = (item: MenuItem, delta: number) => {
-    setCart((prev) => {
-      const existing = prev.find((c) => c.id === item.id)
-      if (!existing && delta > 0) {
-        return [...prev, { id: item.id, name: item.name, price: item.price, quantity: 1 }]
-      }
-      if (existing) {
-        const newQty = existing.quantity + delta
-        if (newQty <= 0) return prev.filter((c) => c.id !== item.id)
-        return prev.map((c) => (c.id === item.id ? { ...c, quantity: newQty } : c))
-      }
-      return prev
-    })
+    const existing = cart.find((c) => c.id === item.id)
+    if (!existing && delta > 0) {
+      addToCart({ id: item.id, name: item.name, price: item.price, isVeg: item.isVeg, image: item.image })
+    } else if (existing) {
+      updateQuantity(item.id, delta)
+    }
   }
 
   const getItemQuantity = (id: string) => {
@@ -493,16 +487,6 @@ export default function MenuClient() {
           </div>
         )}
       </div>
-
-      {/* Floating Order Cart Drawer */}
-      <QuickOrderDrawer
-        cart={cart}
-        onUpdateQuantity={(id, delta) => {
-          const item = MENU_ITEMS.find((m) => m.id === id)
-          if (item) handleUpdateQuantity(item, delta)
-        }}
-        onClearCart={() => setCart([])}
-      />
     </div>
   )
 }

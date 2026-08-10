@@ -7,8 +7,8 @@ import { motion } from 'framer-motion'
 import { MapPin, Clock, Star, Users, Award, UtensilsCrossed, Heart, Play, Flame, Sparkles, ExternalLink, ShieldCheck, ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import FoodReelsModal, { REELS_DATA } from '@/components/FoodReelsModal'
-import QuickOrderDrawer, { CartItem } from '@/components/QuickOrderDrawer'
 import { MENU_ITEMS } from '@/app/menu/MenuClient'
+import { useCart } from '@/context/CartContext'
 
 const TextReveal = dynamic(() => import('@/components/TextReveal'), { ssr: false })
 const ScrollReveal = dynamic(() => import('@/components/ScrollReveal'), { ssr: false })
@@ -33,7 +33,7 @@ const features = [
 export default function HomeClient() {
   const [isReelOpen, setIsReelOpen] = useState(false)
   const [activeReelId, setActiveReelId] = useState('kulcha')
-  const [cart, setCart] = useState<CartItem[]>([])
+  const { addToCart, setIsDrawerOpen } = useCart()
 
   const openReel = (id: string) => {
     setActiveReelId(id)
@@ -43,13 +43,8 @@ export default function HomeClient() {
   const handleQuickAdd = (dishName: string) => {
     const found = MENU_ITEMS.find((m) => m.name.toLowerCase().includes(dishName.toLowerCase()))
     if (found) {
-      setCart((prev) => {
-        const existing = prev.find((c) => c.id === found.id)
-        if (existing) {
-          return prev.map((c) => (c.id === found.id ? { ...c, quantity: c.quantity + 1 } : c))
-        }
-        return [...prev, { id: found.id, name: found.name, price: found.price, quantity: 1 }]
-      })
+      addToCart({ id: found.id, name: found.name, price: found.price, isVeg: found.isVeg, image: found.image })
+      setIsDrawerOpen(true)
     }
   }
 
@@ -363,21 +358,6 @@ export default function HomeClient() {
         onClose={() => setIsReelOpen(false)}
         initialReelId={activeReelId}
         onSelectOrder={(dishName) => handleQuickAdd(dishName)}
-      />
-
-      {/* Floating Quick Order Cart Drawer */}
-      <QuickOrderDrawer
-        cart={cart}
-        onUpdateQuantity={(id, delta) => {
-          setCart((prev) => {
-            const found = prev.find((c) => c.id === id)
-            if (!found) return prev
-            const newQty = found.quantity + delta
-            if (newQty <= 0) return prev.filter((c) => c.id !== id)
-            return prev.map((c) => (c.id === id ? { ...c, quantity: newQty } : c))
-          })
-        }}
-        onClearCart={() => setCart([])}
       />
     </>
   )
