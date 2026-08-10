@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight, MessageSquare } from 'lucide-react'
 import { useCart, CartItem } from '@/context/CartContext'
+import { useRouter } from 'next/navigation'
 
 export default function QuickOrderDrawer() {
+  const router = useRouter()
   const {
     cart,
     isDrawerOpen,
@@ -268,21 +270,23 @@ export default function QuickOrderDrawer() {
 
                 <div className="space-y-2">
                   <button
-                    disabled={isSubmitting}
-                    onClick={() => handlePlaceOrder('whatsapp')}
-                    className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
+                    onClick={() => {
+                      setIsDrawerOpen(false)
+                      router.push('/checkout')
+                    }}
+                    className="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
                   >
-                    <MessageSquare className="w-4 h-4 fill-white" />
-                    <span>Order via WhatsApp & Pay</span>
+                    <span>Proceed to Full Checkout</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
 
                   <button
                     disabled={isSubmitting}
-                    onClick={() => handlePlaceOrder('cod')}
-                    className="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+                    onClick={() => handlePlaceOrder('whatsapp')}
+                    className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                   >
-                    <span>Place Order (Cash / Counter)</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <MessageSquare className="w-4 h-4 fill-white" />
+                    <span>Quick Order via WhatsApp</span>
                   </button>
                 </div>
               </div>

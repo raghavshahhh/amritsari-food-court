@@ -33,7 +33,7 @@ const features = [
 export default function HomeClient() {
   const [isReelOpen, setIsReelOpen] = useState(false)
   const [activeReelId, setActiveReelId] = useState('kulcha')
-  const { addToCart, setIsDrawerOpen } = useCart()
+  const { openAddToCartModal } = useCart()
 
   const openReel = (id: string) => {
     setActiveReelId(id)
@@ -43,8 +43,7 @@ export default function HomeClient() {
   const handleQuickAdd = (dishName: string) => {
     const found = MENU_ITEMS.find((m) => m.name.toLowerCase().includes(dishName.toLowerCase()))
     if (found) {
-      addToCart({ id: found.id, name: found.name, price: found.price, isVeg: found.isVeg, image: found.image })
-      setIsDrawerOpen(true)
+      openAddToCartModal({ id: found.id, name: found.name, price: found.price, isVeg: found.isVeg, image: found.image, desc: found.desc })
     }
   }
 

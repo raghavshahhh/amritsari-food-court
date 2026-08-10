@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { CartProvider } from '@/context/CartContext'
 import ToastContainer from './ToastContainer'
 import OrderTrackerModal from './OrderTrackerModal'
+import AddToCartModal from './AddToCartModal'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -33,6 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           {children}
           <ToastContainer />
           <OrderTrackerModal />
+          <AddToCartModal />
         </ReactLenis>
       </CartProvider>
     </QueryClientProvider>

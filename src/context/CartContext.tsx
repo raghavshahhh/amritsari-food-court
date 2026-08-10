@@ -9,6 +9,17 @@ export interface CartItem {
   quantity: number
   isVeg: boolean
   image?: string
+  addOns?: string[]
+  spiceLevel?: string
+}
+
+export interface MenuItemForModal {
+  id: string
+  name: string
+  price: number
+  isVeg: boolean
+  image?: string
+  desc?: string
 }
 
 export interface Toast {
@@ -50,6 +61,9 @@ interface CartContextType {
   isTrackerOpen: boolean
   setIsTrackerOpen: (open: boolean) => void
   fetchOrderStatus: (id: string) => Promise<void>
+  selectedItemForModal: MenuItemForModal | null
+  openAddToCartModal: (item: MenuItemForModal) => void
+  closeAddToCartModal: () => void
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -72,6 +86,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [toasts, setToasts] = useState<Toast[]>([])
   const [activeOrder, setActiveOrder] = useState<PlacedOrder | null>(null)
   const [isTrackerOpen, setIsTrackerOpen] = useState(false)
+  const [selectedItemForModal, setSelectedItemForModal] = useState<MenuItemForModal | null>(null)
 
   // Save cart to localStorage on change
   useEffect(() => {
@@ -94,18 +109,30 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, 3500)
   }, [removeToast])
 
+  const openAddToCartModal = (item: MenuItemForModal) => {
+    setSelectedItemForModal(item)
+  }
+
+  const closeAddToCartModal = () => {
+    setSelectedItemForModal(null)
+  }
+
   const addToCart = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
     const qtyToAdd = item.quantity || 1
+    const cartItemId = item.addOns && item.addOns.length > 0
+      ? `${item.id}-${item.addOns.sort().join('-')}`
+      : item.id
+
     setCart((prev) => {
-      const existingIndex = prev.findIndex((i) => i.id === item.id)
+      const existingIndex = prev.findIndex((i) => i.id === cartItemId)
       if (existingIndex > -1) {
         const updated = [...prev]
         updated[existingIndex].quantity += qtyToAdd
         return updated
       }
-      return [...prev, { ...item, quantity: qtyToAdd }]
+      return [...prev, { ...item, id: cartItemId, quantity: qtyToAdd }]
     })
-    showToast(`Added ${item.name} to order`)
+    showToast(`Added ${item.name} to cart`)
   }
 
   const removeFromCart = (id: string) => {
@@ -165,6 +192,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isTrackerOpen,
         setIsTrackerOpen,
         fetchOrderStatus,
+        selectedItemForModal,
+        openAddToCartModal,
+        closeAddToCartModal,
       }}
     >
       {children}

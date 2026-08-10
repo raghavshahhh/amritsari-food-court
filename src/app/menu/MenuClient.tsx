@@ -258,7 +258,7 @@ export default function MenuClient() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [dietaryFilter, setDietaryFilter] = useState<'all' | 'veg' | 'nonveg'>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const { cart, addToCart, updateQuantity } = useCart()
+  const { cart, addToCart, updateQuantity, openAddToCartModal } = useCart()
 
   const handleUpdateQuantity = (item: MenuItem, delta: number) => {
     const existing = cart.find((c) => c.id === item.id)
@@ -441,8 +441,8 @@ export default function MenuClient() {
                       {/* Tags & Spicy meter */}
                       <div className="flex flex-wrap items-center gap-2 mb-4">
                         {item.spicyLevel && (
-                          <span className="text-xs text-amber-500/80 font-medium">
-                            {'🌶️'.repeat(item.spicyLevel)}
+                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">
+                            Spicy Lvl {item.spicyLevel}
                           </span>
                         )}
                         {item.tags.map((tag) => (
@@ -458,7 +458,7 @@ export default function MenuClient() {
                   <div className="p-5 pt-0">
                     {qty === 0 ? (
                       <button
-                        onClick={() => handleUpdateQuantity(item, 1)}
+                        onClick={() => openAddToCartModal({ id: item.id, name: item.name, price: item.price, isVeg: item.isVeg, image: item.image, desc: item.desc })}
                         className="w-full py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-400 hover:text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-amber-500/30"
                       >
                         <Plus className="w-4 h-4" /> Add to Order
