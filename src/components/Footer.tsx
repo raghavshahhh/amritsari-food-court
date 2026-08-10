@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { MapPin, Clock, Star, ArrowRight, PhoneCall } from 'lucide-react'
 
 const footerLinks = [
@@ -14,6 +15,11 @@ const footerLinks = [
 ]
 
 export default function Footer() {
+  const pathname = usePathname()
+
+  // Hide footer on menu and checkout pages per user directive
+  if (pathname === '/menu' || pathname === '/checkout') return null
+
   return (
     <footer className="relative max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-8">
       <div className="rounded-[32px] bg-neutral-950 border border-white/12 p-8 sm:p-12 shadow-2xl relative overflow-hidden">
