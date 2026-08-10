@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Search, Flame, Plus, Minus } from 'lucide-react'
+import { Search, Plus, Minus } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 
 const TextReveal = dynamic(() => import('@/components/TextReveal'), { ssr: false })
@@ -388,93 +388,90 @@ export default function MenuClient() {
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="glass-card overflow-hidden hover:border-amber-500/40 transition-all group flex flex-col justify-between"
+                  className="glass-card overflow-hidden hover:border-amber-500/40 transition-all group flex flex-col justify-between rounded-[24px] border border-white/12"
                 >
                   <div>
-                    {/* Dish Image */}
+                    {/* Dish Image Header */}
                     {item.image ? (
-                      <div className="aspect-[16/9] relative overflow-hidden bg-black/40">
+                      <div className="aspect-[16/10] relative overflow-hidden bg-black/40">
                         <Image
                           src={item.image}
                           alt={item.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute top-3 left-3 flex gap-1.5">
-                          <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
-                              item.isVeg ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-500/40' : 'bg-rose-950/90 text-rose-400 border border-rose-500/40'
-                            }`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-400'}`} />
-                            {item.isVeg ? 'Veg' : 'Non-Veg'}
-                          </span>
-                          {item.popular && (
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-black flex items-center gap-1 shadow-md">
-                              <Flame className="w-3 h-3 fill-black" /> Popular
+                        {/* Top Left Bestseller Badge */}
+                        <div className="absolute top-3 left-3 flex gap-1.5 z-10">
+                          {item.popular ? (
+                            <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-amber-500 text-black flex items-center gap-1 shadow-md">
+                              ★ BESTSELLER
+                            </span>
+                          ) : (
+                            <span
+                              className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md ${
+                                item.isVeg ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/40' : 'bg-rose-950/80 text-rose-400 border border-rose-500/40'
+                              }`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                              {item.isVeg ? 'Veg' : 'Non-Veg'}
                             </span>
                           )}
                         </div>
+
+                        {/* Top Right Floating Price Tag */}
+                        <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-xl bg-black/80 backdrop-blur-md text-amber-400 font-display font-black text-sm border border-white/15 shadow-xl">
+                          ₹{item.price}
+                        </div>
                       </div>
                     ) : (
-                      <div className="p-4 pt-6 flex justify-between items-start">
+                      <div className="p-4 pt-6 flex justify-between items-center">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
                             item.isVeg ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-500/40' : 'bg-rose-950/90 text-rose-400 border border-rose-500/40'
                           }`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-400'}`} />
                           {item.isVeg ? 'Veg' : 'Non-Veg'}
                         </span>
+                        <span className="text-amber-400 font-display font-black text-lg">₹{item.price}</span>
                       </div>
                     )}
 
                     {/* Card Content */}
-                    <div className="p-5">
-                      <div className="flex justify-between items-start gap-2 mb-2">
+                    <div className="p-5 space-y-2">
+                      <div className="flex items-center justify-between">
                         <h3 className="font-display font-extrabold text-white text-lg leading-snug">{item.name}</h3>
-                        <span className="text-amber-400 font-display font-black text-xl shrink-0">₹{item.price}</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/5 text-white/50 border border-white/10 shrink-0">
+                          {item.category.split(' ')[0]}
+                        </span>
                       </div>
 
-                      <p className="text-white/60 text-xs leading-relaxed mb-4">{item.desc}</p>
-
-                      {/* Tags & Spicy meter */}
-                      <div className="flex flex-wrap items-center gap-2 mb-4">
-                        {item.spicyLevel && (
-                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">
-                            Spicy Lvl {item.spicyLevel}
-                          </span>
-                        )}
-                        {item.tags.map((tag) => (
-                          <span key={tag} className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white/5 text-white/60 border border-white/10">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                      <p className="text-white/60 text-xs leading-relaxed line-clamp-2">{item.desc}</p>
                     </div>
                   </div>
 
-                  {/* Card Bottom CTA */}
+                  {/* Card Bottom CTA (Exact Dom-Dang style toggle) */}
                   <div className="p-5 pt-0">
                     {qty === 0 ? (
                       <button
                         onClick={() => openAddToCartModal({ id: item.id, name: item.name, price: item.price, isVeg: item.isVeg, image: item.image, desc: item.desc })}
-                        className="w-full py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-400 hover:text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-amber-500/30"
+                        className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-amber-500/20"
                       >
-                        <Plus className="w-4 h-4" /> Add to Order
+                        <Plus className="w-4 h-4" />
+                        <span>Add to Order</span>
                       </button>
                     ) : (
-                      <div className="flex items-center justify-between bg-amber-500 text-black rounded-xl p-1 font-bold">
+                      <div className="w-full py-1.5 px-3 rounded-2xl bg-white/5 border border-amber-500/40 text-amber-400 flex items-center justify-between font-extrabold text-sm">
                         <button
                           onClick={() => handleUpdateQuantity(item, -1)}
-                          className="w-8 h-8 rounded-lg bg-black/10 hover:bg-black/20 flex items-center justify-center"
+                          className="w-8 h-8 rounded-xl bg-amber-500/20 hover:bg-amber-500 hover:text-black text-amber-400 flex items-center justify-center transition-all"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="font-display font-extrabold text-sm">{qty} in cart</span>
+                        <span className="font-display font-black text-base text-white">{qty}</span>
                         <button
                           onClick={() => handleUpdateQuantity(item, 1)}
-                          className="w-8 h-8 rounded-lg bg-black/10 hover:bg-black/20 flex items-center justify-center"
+                          className="w-8 h-8 rounded-xl bg-amber-500/20 hover:bg-amber-500 hover:text-black text-amber-400 flex items-center justify-center transition-all"
                         >
                           <Plus className="w-4 h-4" />
                         </button>
